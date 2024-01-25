@@ -1,0 +1,80 @@
+<meta charset="UTF-8">
+<canvas width="600" height="300"></canvas>
+<script>
+	var tela = document.querySelector('canvas');
+	var pincel = tela.getContext('2d');
+
+	pincel.fillStyle = 'lightblue';
+	pincel.fillRect(0, 0, 600, 600);
+
+	function desenhaFundoTela() {
+		pincel.fillStyle = 'lightblue';
+		pincel.fillRect(0, 0, 600, 300);
+	}
+
+	function atualizaTela() {
+		desenhaFundoTela();
+		desenhaObstaculo();
+	}
+
+	function moverCarrinho(evento) {
+		atualizaTela();
+		pincel.fillStyle = 'red';
+		pincel.fillRect(evento.pageX - tela.offsetLeft-20, yCarrinho, 100, 40);
+		xCarrinho = evento.pageX - tela.offsetLeft-20;
+	}
+
+	function desenhaObstaculo() {
+		pincel.fillStyle = 'black';
+		pincel.fillRect(xObstaculo, yObstaculo, 50, 50);
+	}
+
+	function verificarColisao() {
+		if (yObstaculo+40 == yCarrinho) {
+			console.log('xCarrinho = ' + xCarrinho);
+			console.log('xObstaculo = ' + xObstaculo);
+			if(xCarrinho - xObstaculo < 40 && xObstaculo - xCarrinho < 100) {
+				alert('VOCÊ PERDEU !!!')
+			}
+		}
+		
+	}
+
+	function moverObstaculo() {
+		atualizaTela();
+		yObstaculo++;
+		verificarColisao();
+		if(yObstaculo == 300) {
+			qtdObstaculos++;
+			if(qtdObstaculos==5) {
+				alert('VOCÊ GANHOU!!!!');
+			} else {
+				yObstaculo = 0;
+				xObstaculo = inicioAleatorioObstaculo();
+			}
+		}
+	}
+
+	function inicioAleatorioObstaculo() {
+		return Math.round(Math.random()*550);
+	}
+
+	function mostrarCarrinho() {
+		atualizaTela();
+		pincel.fillStyle = 'red';
+		pincel.fillRect(xCarrinho, yCarrinho, 100, 40);
+	}
+
+	var xObstaculo = 200;
+	var yObstaculo = 0;
+	var xCarrinho;
+	var yCarrinho = 260;
+	var qtdObstaculos = 0;
+
+	setInterval(moverObstaculo, 10);
+	
+	tela.onmousemove = moverCarrinho;
+
+	setInterval(mostrarCarrinho, 5);
+
+</script>
